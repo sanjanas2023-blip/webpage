@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uni-dept-deployment
+  labels:
+    app: uni-dept
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: uni-dept
+  template:
+    metadata:
+      labels:
+        app: uni-dept
+    spec:
+      containers:
+      - name: uni-dept-container
+        # Replace with your actual Docker Hub image name
+        image: your-docker-hub-user/uni-dept:latest
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: uni-dept-service
+spec:
+  # NodePort makes it accessible on your machine's IP at a specific port
+  type: NodePort
+  selector:
+    app: uni-dept
+  ports:
+    - port: 80
+      targetPort: 80
+      # You can access the site at http://localhost:30007 in Docker Desktop
+      nodePort: 30007
